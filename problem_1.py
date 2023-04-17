@@ -1,12 +1,12 @@
 from unified_planning.shortcuts import *
 from unified_planning.io import PDDLWriter
 
-# Objects
+# Types
 Apple = UserType("Apple")
 Robot = UserType("Robot")
 Location = UserType("Location")
 
-# Agents
+# Fluents
 At = Fluent("At", BoolType(), robot=Robot, locaiton=Location)
 On = Fluent("On", BoolType(), apple=Apple, location=Location)
 Holding = Fluent("Holding", BoolType(), robot=Robot, apple=Apple)
@@ -81,9 +81,3 @@ plan_1 = result_1.plan
 
 for a in plan_1.actions:
     print(a)
-
-
-
-
-
-
