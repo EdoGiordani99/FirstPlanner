@@ -12,14 +12,14 @@ On = Fluent("On", BoolType(), apple=Apple, location=Location)
 Holding = Fluent("Holding", BoolType(), robot=Robot, apple=Apple)
 
 # Move Action
-move = InstantaneousAction("move", r=Robot, fl=Location, tl=Location)
-fl = move.parameter("fl")
-tl = move.parameter("tl")
+move = InstantaneousAction("move", r=Robot, l_from=Location, l_to=Location)
+l_from = move.parameter("l_from")
+l_to = move.parameter("l_to")
 r = move.parameter("r")
-move.add_precondition(At(r, fl))
-move.add_precondition(Not(At(r, fl)))
-move.add_effect(At(r, fl), True)
-move.add_effect(At(r, tl), False)
+move.add_precondition(At(r, l_from))
+move.add_precondition(Not(At(r, l_to)))
+move.add_effect(At(r, l_from), False)
+move.add_effect(At(r, l_to), True)
 
 # Pick Action
 pick = InstantaneousAction("pick", a=Apple, r=Robot, loc=Location)
@@ -33,18 +33,19 @@ pick.add_effect(Holding(r, a), True)
 pick.add_effect(On(a, loc), False)
 
 # Place Action
-place = InstantaneousAction("place", a=Apple, r=Robot, loc=Location)
-loc = place.parameter("loc")
+place = InstantaneousAction("place", a=Apple, r=Robot, l=Location)
 a = place.parameter("a")
 r = place.parameter("r")
+l = place.parameter("l")
 place.add_precondition(Holding(r, a))
-place.add_precondition(At(r, loc))
+place.add_precondition(At(r, l))
+place.add_precondition(Not(On(a, l)))
+place.add_effect(On(a, l), True)
 place.add_effect(Holding(r, a), False)
-place.add_effect(On(a, loc), True)
 
 
 # Defining the Problem
-problem_1 = Problem("1")
+problem_1 = Problem("problem_1")
 
 robot0 = Object("robot0", Robot)
 apple0 = Object("apple0", Apple)
@@ -62,7 +63,6 @@ problem_1.add_action(place)
 # Initial State
 problem_1.set_initial_value(At(robot0, table), True)
 problem_1.set_initial_value(On(apple0, shelf), True)
-problem_1.set_initial_value(On(apple0, table), False)
 
 # Goal
 problem_1.add_goal(On(apple0, table))
@@ -79,7 +79,8 @@ FD_Planner = OneshotPlanner(name='fast-downward')
 result_1 = FD_Planner.solve(problem_1)
 plan_1 = result_1.plan
 
-print(plan_1)
+for a in plan_1.actions:
+    print(a)
 
 
 

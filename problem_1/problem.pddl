@@ -1,5 +1,5 @@
-(define (problem p_1-problem)
- (:domain p_1-domain)
+(define (problem problem_1-problem)
+ (:domain problem_1-domain)
  (:objects
    robot0 - robot
    apple0 - apple
