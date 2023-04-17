@@ -22,7 +22,7 @@ move.add_effect(At(r, fl), True)
 move.add_effect(At(r, tl), False)
 
 # Pick Action
-pick = InstantaneousAction("pick", r=Robot, a=Apple, loc=Location)
+pick = InstantaneousAction("pick", a=Apple, r=Robot, loc=Location)
 loc = pick.parameter("loc")
 a = pick.parameter("a")
 r = pick.parameter("r")
@@ -33,7 +33,7 @@ pick.add_effect(Holding(r, a), True)
 pick.add_effect(On(a, loc), False)
 
 # Place Action
-place = InstantaneousAction("place", r=Robot, a=Apple, loc=Location)
+place = InstantaneousAction("place", a=Apple, r=Robot, loc=Location)
 loc = place.parameter("loc")
 a = place.parameter("a")
 r = place.parameter("r")
@@ -62,6 +62,7 @@ problem_1.add_action(place)
 # Initial State
 problem_1.set_initial_value(At(robot0, table), True)
 problem_1.set_initial_value(On(apple0, shelf), True)
+problem_1.set_initial_value(On(apple0, table), False)
 
 # Goal
 problem_1.add_goal(On(apple0, table))
@@ -71,6 +72,14 @@ w = PDDLWriter(problem_1)
 w.write_domain('problem_1/domain.pddl')
 w.write_problem('problem_1/problem.pddl')
 
+
+# Solver
+up.shortcuts.get_env().credits_stream = None
+FD_Planner = OneshotPlanner(name='fast-downward')
+result_1 = FD_Planner.solve(problem_1)
+plan_1 = result_1.plan
+
+print(plan_1)
 
 
 

@@ -7,11 +7,11 @@
   :precondition (and (at_ ?r ?fl) (not (at_ ?r ?fl)))
   :effect (and (at_ ?r ?fl) (not (at_ ?r ?tl))))
  (:action pick
-  :parameters ( ?r - robot ?a - apple ?loc - location)
+  :parameters ( ?a - apple ?r - robot ?loc - location)
   :precondition (and (at_ ?r ?loc) (on ?a ?loc) (not (holding ?r ?a)))
   :effect (and (holding ?r ?a) (not (on ?a ?loc))))
  (:action place
-  :parameters ( ?r - robot ?a - apple ?loc - location)
+  :parameters ( ?a - apple ?r - robot ?loc - location)
   :precondition (and (holding ?r ?a) (at_ ?r ?loc))
   :effect (and (not (holding ?r ?a)) (on ?a ?loc)))
 )
